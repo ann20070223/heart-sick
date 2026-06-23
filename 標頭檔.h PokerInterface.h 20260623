@@ -1,0 +1,10 @@
+#pragma once
+#include <string>
+
+// 定義 DLL 讀取主程式資料的介面
+class IPokerApp {
+public:
+    virtual std::wstring GetCurrentCardLabel() = 0;
+    virtual std::wstring GetCurrentSeqLabel() = 0;
+    virtual ~IPokerApp() {}
+};
