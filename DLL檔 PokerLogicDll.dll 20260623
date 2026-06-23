@@ -1,0 +1,26 @@
+#include <windows.h>
+#include "../PokerApp/PokerInterface.h" // 請指向您的標頭檔路徑
+
+extern "C" __declspec(dllexport) void check(HWND hwnd) {
+    // 透過視窗控制代碼取得主程式指標
+    IPokerApp* pApp = reinterpret_cast<IPokerApp*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+
+    if (pApp) {
+        std::wstring card = pApp->GetCurrentCardLabel();
+        std::wstring seq = pApp->GetCurrentSeqLabel();
+
+        // 簡單的數值轉換
+        auto GetVal = [](const std::wstring& s) -> int {
+            if (s == L"A") return 1;
+            if (s == L"J") return 11;
+            if (s == L"Q") return 12;
+            if (s == L"K") return 13;
+            return _wtoi(s.c_str());
+            };
+
+        if (GetVal(card) == GetVal(seq)) {
+            // 發送 'Y' 給主視窗
+            SendMessageW(hwnd, WM_CHAR, (WPARAM)L'Y', 0);
+        }
+    }
+}
